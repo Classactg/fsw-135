@@ -2,18 +2,16 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // Votes Blueprint
-const movieSchema = new Schema({
+const voteSchema = new Schema({
     name: {
-        first: String,
-        last: String,
+        type: String,
         required: true 
     },
     party: {
-        elephant: String,
-        donkey: String,
+        type: String,
         required: true
     },
     proposition: Number
 })
 
-module.exports = mongoose.model("Votes", voteRouter)
+module.exports = mongoose.model("Votes", voteSchema)

@@ -1,34 +1,69 @@
 const express = require('express')
 const voteRouter = express.Router()
-const Vote = require("../models/vote.js")
+const voteItem = require("../models/vote.js")
 
 
-// Get All votes
-voteRouter.get("/", (req, res) => {
-   Vote.find((err, votes) => {
-    if(err){
-        res.status(500)
-        return next(err)
-    }
-    return res.status(200).send(votes)
-   })
+
+
+// Get All
+voteRouter.get("/", (req, res, next) => {
+    voteItem.find((err, allvote) => {
+        if(err){
+            res.status(500)
+            return next(err)
+        }
+        return res.status(200).send(allvote)
+    })
+})
+
+// Get One
+voteRouter.get("/:voteId", (req, res, next) => {
+    voteItem.findOne((err, onevoteItem) => {
+        if(err){
+            res.status(500)
+            return next(err)
+        }
+        return res.status(200).send(onevoteItem)
+    })
 })
 
 // Post One
-movieRouter.post("/", (req, res) => {
-    const newVote = req.body
-    newVote._id = uuid()
-    votes.push(newVote)
-    res.status(201).send(newVote)
+voteRouter.post("/", (req, res, next) => {
+    const newvote = new voteItem(req.body)
+    newvote.save((err, savedvote) => {
+        if(err){
+            res.status(500)
+            return next(err)
+        }
+        return res.status(201).send(savedvote)
+    })
 })
 
-
-// Get One
-voteRouter.get("/:votesId", (req, res, next) => {
-    const voteId = req.params.voteId
-    const foundVote = votes.find(vote => vote._id === voteId)
-    if(!foundVote){
-        const error = new Error(`The item with id ${voteId} was not found.`)
-        return next(error)
-    }
+// Update One
+voteRouter.put("/:voteId", (req, res, next) => {
+    voteItem.findOneAndUpdate(
+        {_id: req.params.voteId}, // find this one to update
+        req.body, // update the object with this data
+        {new: true}, // sends back the updated version
+        (err, updatedvote) => {
+            if(err){
+                res.status(500)
+                return next(err)
+            }
+            return res.status(201).send(updatedvote)
+        }
+    )
 })
+
+// Delete One
+voteRouter.delete("/:voteId", (req, res, next) => {
+    voteItem.findOneAndDelete({_id: req.params.voteId}, (err, deletedvote) => {
+        if(err){
+            res.status(500)
+            return next(err)
+        }
+        return res.status(200).send(`Successfully deleted item ${deletedvote.title} from the database!`)
+    })
+})
+
+module.exports = voteRouter

@@ -21,7 +21,9 @@ mongoose.connect('mongodb://localhost:27017/votesdb',
 
 
 // Routes //
-app.use("/votes", require("./Rock_the_Vote/routes/voteRouter.js")
+app.use("/user", require("./routes/userRouter"))
+app.use("/issue", require("./routes/issueRouter"))
+app.use("/comment", require("./routes/commentRouter"))
 
 // Error handler 
 app.use((err, req, res, next) => {
