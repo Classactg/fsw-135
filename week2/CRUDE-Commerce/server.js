@@ -1,9 +1,10 @@
 const express = require ('express')
 const app = express()
+require('dotenv').config()
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 
-
+process.env.SECRET
 
 // Middleware (for every request) //
 app.use(express.json())
